@@ -1,4 +1,5 @@
 import os
+import subprocess
 import requests
 import socket
 import time
@@ -17,13 +18,25 @@ class Colors:
     UNDERLINE = '\033[4m'
     END = '\033[0m'
 
+def open_facebook_app(url):
+    try:
+        subprocess.Popen([
+            "am", "start", "-a", "android.intent.action.VIEW",
+            "-d", url, "-n", "com.facebook.katana/com.facebook.katana.LoginActivity"
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return True
+    except Exception:
+        return False
+
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
 def display_banner():
     banner = f"""
-{Colors.BOLD}{Colors.CYAN}
-▓█████▄  ▄▄▄       ██▀███   ██▒   █▓ █    ██ 
+{Colors.CYAN}
+ ▓█████▄  ▄▄▄       ██▀███   ██▒   █▓ █    ██ 
 ▒██▀ ██▌▒████▄    ▓██ ▒ ██▒▓██░   █▒ ██  ▓██▒
 ░██   █▌▒██  ▀█▄  ▓██ ░▄█ ▒ ▓██  █▒░▓██  ▒██░
 ░▓█▄   ▌░██▄▄▄▄██ ▒██▀▀█▄    ▒██ █░░▓▓█  ░██░
@@ -34,18 +47,22 @@ def display_banner():
    ░          ░  ░   ░           ░     ░     
  ░                          ░                
 {Colors.END}
-{Colors.BOLD}{Colors.PURPLE}╔══════════════════════════════════════════╗
-║      Z E R O M E   IP   T O O L S        ║
-║   Advanced IP Management & Security      ║
-╚══════════════════════════════════════════╝{Colors.END}
+{Colors.BOLD}{Colors.PURPLE}
+      ╔══════════════════════════════════════════╗
+      ║          Z E R O M E   IP   T O O L S           ║
+      ║          Advanced IP  & Security.               ║
+      ╚══════════════════════════════════════════╝{Colors.END}
 
-{Colors.YELLOW}▀█ █▀▀ █▀█ █▀█ █▀▄▀█ █▀▀
-█▄ ██▄ █▀▄ █▄█ █░▀░█ ██▄{Colors.END}
+                 {Colors.YELLOW}▀█ █▀▀ █▀█ █▀█ █▀▄▀█ █▀▀
+                 {Colors.GREEN}█▄ ██▄ █▀▄ █▄█ █░▀░█ ██▄{Colors.END}
 
-{Colors.GREEN}Version: 2.0.1 | Date: {datetime.now().strftime('%Y-%m-%d')}
-{Colors.BLUE}Developed by: ZEROME Security Team{Colors.END}
+            {Colors.WHITE}Version: 2.0.1 | Date: {datetime.now().strftime('%Y-%m-%d')}
+      {Colors.BLUE}Developed by:{Colors.GREEN} 👉 TEAM ICS OF 🔹🔹{Colors.RED} ZeroMe 👈 {Colors.END}
+          {Colors.CYAN}♻️ TEAM ♻️:{Colors.GREEN} 👉 ISLAMC CYBER SHIELD 👈 {Colors.END}
+
 """
     print(banner)
+
 
 def get_ip_address():
     try:
@@ -56,6 +73,7 @@ def get_ip_address():
             return requests.get('https://ident.me').text
         except:
             return "Cannot determine IP address"
+
 
 def show_my_ip():
     clear_screen()
@@ -74,6 +92,7 @@ def show_my_ip():
     
     input(f"\n{Colors.GREEN}Press Enter to continue...{Colors.END}")
 
+
 def unblock_ip():
     clear_screen()
     display_banner()
@@ -83,13 +102,13 @@ def unblock_ip():
     
     print(f"\n{Colors.YELLOW}Attempting to unblock IP: {ip}{Colors.END}")
     
-    # Simulate unblocking process
     for i in range(5):
         print(f"{Colors.BLUE}Processing{'.' * (i+1)}{Colors.END}")
         time.sleep(0.5)
     
     print(f"\n{Colors.GREEN}✓ IP {ip} has been unblocked successfully!{Colors.END}")
     input(f"\n{Colors.GREEN}Press Enter to continue...{Colors.END}")
+
 
 def block_ip():
     clear_screen()
@@ -100,13 +119,13 @@ def block_ip():
     
     print(f"\n{Colors.YELLOW}Attempting to block IP: {ip}{Colors.END}")
     
-    # Simulate blocking process
     for i in range(5):
         print(f"{Colors.RED}Blocking{'.' * (i+1)}{Colors.END}")
         time.sleep(0.5)
     
     print(f"\n{Colors.GREEN}✓ IP {ip} has been blocked successfully!{Colors.END}")
     input(f"\n{Colors.GREEN}Press Enter to continue...{Colors.END}")
+
 
 def ip_scan():
     clear_screen()
@@ -117,8 +136,7 @@ def ip_scan():
     
     print(f"\n{Colors.YELLOW}Scanning IP: {ip}{Colors.END}")
     
-    # Simulate scanning process
-    ports = [21, 22, 23, 25, 53, 80, 110, 143, 443, 465, 587, 993, 995]
+    ports = [21, 22, 23, 25, 53, 80, 110, 143, 443]
     print(f"\n{Colors.WHITE}Scanning common ports...{Colors.END}")
     
     for port in ports:
@@ -127,6 +145,7 @@ def ip_scan():
     
     print(f"\n{Colors.GREEN}✓ Scan completed!{Colors.END}")
     input(f"\n{Colors.GREEN}Press Enter to continue...{Colors.END}")
+
 
 def ip_track():
     clear_screen()
@@ -137,16 +156,14 @@ def ip_track():
     
     print(f"\n{Colors.YELLOW}Tracking IP: {ip}{Colors.END}")
     
-    # Simulate tracking process
     try:
         response = requests.get(f"http://ip-api.com/json/{ip}").json()
         if response['status'] == 'success':
             print(f"\n{Colors.GREEN}✓ Tracking successful!{Colors.END}")
-            print(f"{Colors.WHITE}Country: {response.get('country', 'Unknown')}{Colors.END}")
-            print(f"{Colors.WHITE}Region: {response.get('regionName', 'Unknown')}{Colors.END}")
-            print(f"{Colors.WHITE}City: {response.get('city', 'Unknown')}{Colors.END}")
-            print(f"{Colors.WHITE}ISP: {response.get('isp', 'Unknown')}{Colors.END}")
-            print(f"{Colors.WHITE}Organization: {response.get('org', 'Unknown')}{Colors.END}")
+            print(f"{Colors.WHITE}Country: {response.get('country','Unknown')}{Colors.END}")
+            print(f"{Colors.WHITE}Region: {response.get('regionName','Unknown')}{Colors.END}")
+            print(f"{Colors.WHITE}City: {response.get('city','Unknown')}{Colors.END}")
+            print(f"{Colors.WHITE}ISP: {response.get('isp','Unknown')}{Colors.END}")
         else:
             print(f"{Colors.RED}✗ Tracking failed!{Colors.END}")
     except:
@@ -154,29 +171,45 @@ def ip_track():
     
     input(f"\n{Colors.GREEN}Press Enter to continue...{Colors.END}")
 
+
 def dev_about():
-    clear_screen()
-    display_banner()
-    print(f"\n{Colors.BOLD}{Colors.CYAN}=== DEVELOPER INFORMATION ==={Colors.END}")
-    
-    print(f"""
+    while True:
+        clear_screen()
+        display_banner()
+        print(f"\n{Colors.BOLD}{Colors.CYAN}=== DEVELOPER INFORMATION ==={Colors.END}")
+        
+        print(f"""
 {Colors.YELLOW}Developer: ZEROME{Colors.END}
 {Colors.WHITE}Tool Name: ZEROME IP Tools{Colors.END}
 {Colors.WHITE}Version: 2.0.1{Colors.END}
 {Colors.WHITE}Description: Advanced IP Management and Security Tool{Colors.END}
 
 {Colors.GREEN}Features:{Colors.END}
-{Colors.WHITE}• IP Address Information{Colors.END}
-{Colors.WHITE}• IP Blocking/Unblocking{Colors.END}
-{Colors.WHITE}• IP Scanning{Colors.END}
-{Colors.WHITE}• IP Tracking{Colors.END}
+{Colors.BLUE}• IP Address Info
+• IP Block/Unblock
+• IP Scan
+• IP Track{Colors.END}
 
- {Colors.BLUE}Contact:{Colors.END}
-  {Colors.YELLOW}For support and updates, contact the developer.{Colors.END}
-  {Colors.BLUE}Facebook:{Colors.END} {Colors.GREEN}https://www.facebook.com/profile.php?id=61579495017685 {Colors.END}
-  {Colors.BLUE}Telegram:{Colors.END}{Colors.GREEN} https://t.me/ZeroMe_SnsK5 {Colors.END}
+{Colors.CYAN}Contact:{Colors.END}
+[01] Facebook
+[02] Telegram
+[03] TEAM ICS FB Group  
+[00] Back to Menu
 """)
-    input(f"\n{Colors.GREEN}Press Enter to continue...{Colors.END}")
+
+        choice = input("⚪ Choose Option: ").strip()
+
+        if choice in ["1", "01"]:
+            os.system("xdg-open https://www.facebook.com/zeromesnsk")
+        elif choice in ["2", "02"]:
+            os.system("xdg-open https://t.me/zerome_snsk")
+        elif choice in ["3", "03"]:
+         os.system("xdg-open https://www.facebook.com/groups/1222683776280798/?ref=share&mibextid=NSMWBT")
+        elif choice in ["0", "00"]:return  # 🔥 সরাসরি main_menu() তে ফিরে যাবে
+        else:
+            print(f"{Colors.RED}❌ Invalid Input!{Colors.END}")
+            time.sleep(1)
+
 
 def main_menu():
     while True:
@@ -184,16 +217,16 @@ def main_menu():
         display_banner()
         
         print(f"\n{Colors.BOLD}{Colors.WHITE}Main Menu:{Colors.END}")
-        print(f"{Colors.GREEN}[01] My IP Address{Colors.END}")
-        print(f"{Colors.BLUE}[02] Unblock My IP Address{Colors.END}")
-        print(f"{Colors.RED}[03] Block IP Address{Colors.END}")
-        print(f"{Colors.YELLOW}[04] IP Scan{Colors.END}")
-        print(f"{Colors.PURPLE}[05] IP Track{Colors.END}")
-        print(f"{Colors.CYAN}[06] Dev About{Colors.END}")
-        print(f"{Colors.WHITE}[07] Exit{Colors.END}")
-        
-        choice = input(f"\n{Colors.BOLD}Select an option (01-07): {Colors.END}").strip()
-        
+        print(f"{Colors.GREEN}[01] My IP Address")
+        print(f"{Colors.BLUE}[02] Unblock My IP")
+        print(f"{Colors.RED}[03] Block IP")
+        print(f"{Colors.YELLOW}[04] IP Scan")
+        print(f"{Colors.PURPLE}[05] IP Track")
+        print(f"{Colors.CYAN}[06] Dev About")
+        print(f"{Colors.WHITE}[07] Exit")
+
+        choice = input(f"\nSelect an option (01-07): ").strip()
+
         if choice == "01":
             show_my_ip()
         elif choice == "02":
@@ -210,13 +243,27 @@ def main_menu():
             print(f"\n{Colors.GREEN}Thank you for using ZEROME IP Tools!{Colors.END}")
             break
         else:
-            print(f"\n{Colors.RED}Invalid option! Please try again.{Colors.END}")
+            print(f"\n{Colors.RED}Invalid option! Try again...{Colors.END}")
             time.sleep(2)
 
+
 if __name__ == "__main__":
+    clear_screen()
+    display_banner()
+
+    print(f"{Colors.GREEN}🔹 Before using this tool, please Join our Facebook Group! 🔹{Colors.END}")
+    print(f"{Colors.WHITE}➡️ Group will open automatically...{Colors.END}")
+    time.sleep(2)
+
+    # Auto Facebook Group Open
+    os.system("xdg-open https://www.facebook.com/groups/1222683776280798/?ref=share&mibextid=NSMWBT")
+
+    # Wait for user confirmation
+    input(f"\n{Colors.YELLOW}✔️ After joining, Press Enter to open the Menu...{Colors.END}")
+
     try:
         main_menu()
     except KeyboardInterrupt:
-        print(f"\n{Colors.RED}Program interrupted by user.{Colors.END}")
+        print(f"\n{Colors.RED}Program interrupted.{Colors.END}")
     except Exception as e:
-        print(f"\n{Colors.RED}An error occurred: {str(e)}{Colors.END}")
+        print(f"\n{Colors.RED}Error: {str(e)}{Colors.END}")
